@@ -1,0 +1,45 @@
+name: 'Infra - CI/CD'
+
+on:
+  pull_request:
+    paths:
+      - 'infra/**'
+      - '.github/**/infra**.yaml'
+
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'infra/**'
+      - '.github/**/**.infra.yaml'
+
+jobs:
+  deploy_dev:
+    name: Deploy to DEV
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
+      gha_env: DEV
+      env_key: dev
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+  deploy_test:
+    name: Deploy to TEST
+    if: github.ref_name == 'main'
+    needs: deploy_dev
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
+      gha_env: TEST
+      env_key: test
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+  deploy_prd:
+    name: Deploy to PRD
+    needs: deploy_test
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
+      gha_env: PRD
+      env_key: prd
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
