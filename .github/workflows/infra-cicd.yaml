@@ -11,7 +11,7 @@ on:
       - 'main'
     paths:
       - 'infra/**'
-      - '.github/**/**.infra.yaml'
+      - '.github/**/infra**.yaml'
 
   workflow_dispatch:
 
