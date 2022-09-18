@@ -45,20 +45,66 @@ jobs:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           validate: false
 
+  validate_test:
+    name: Validate TEST
+    needs: deploy_dev
+    runs-on: ubuntu-latest
+    environment: TEST
+    env:
+      env_key: TEST
+    steps:
+      - name: Validate Deploy to ${{ env.env_key }}
+        uses: ./.github/workflows/deploy.infra.yaml
+        with:
+          env_key: ${{ env.env_key }}
+          test_message: Hello ${{ env.env_key }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          validate: true
+
   deploy_test:
     name: Deploy TEST
-    if: github.ref_name == 'main'
-    needs: deploy_dev
-    uses: ./.github/workflows/deploy.infra.yaml
-    with:
-      environment: TEST
-      test_message: 'Hello TEST environment!'
+    needs: validate_test
+    runs-on: ubuntu-latest
+    environment: TEST
+    env:
+      env_key: TEST
+    steps:
+      - name: Deploy to ${{ env.env_key }}
+        uses: ./.github/workflows/deploy.infra.yaml
+        with:
+          env_key: ${{ env.env_key }}
+          test_message: Hello ${{ env.env_key }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          validate: false
+
+  validate_prd:
+    name: Validate PRD
+    needs: deploy_test
+    runs-on: ubuntu-latest
+    environment: PRD
+    env:
+      env_key: PRD
+    steps:
+      - name: Validate Deploy to ${{ env.env_key }}
+        uses: ./.github/workflows/deploy.infra.yaml
+        with:
+          env_key: ${{ env.env_key }}
+          test_message: Hello ${{ env.env_key }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          validate: true
 
   deploy_prd:
     name: Deploy PRD
-    if: github.ref_name == 'main'
-    needs: deploy_test
-    uses: ./.github/workflows/deploy.infra.yaml
-    with:
-      environment: PRD
-      test_message: 'Hello PRD environment!'
+    needs: validate_prd
+    runs-on: ubuntu-latest
+    environment: PRD
+    env:
+      env_key: PRD
+    steps:
+      - name: Deploy to ${{ env.env_key }}
+        uses: ./.github/workflows/deploy.infra.yaml
+        with:
+          env_key: ${{ env.env_key }}
+          test_message: Hello ${{ env.env_key }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          validate: false
