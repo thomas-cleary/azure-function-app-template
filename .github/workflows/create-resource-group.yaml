@@ -39,5 +39,5 @@ jobs:
         with:
           inlineScript: |
             #!/bin/bash
-            az group create --name ${{ format(rg-{0}-{1}, inputs.env_key, inputs.project_key) }} --location ${{  inputs.target_region  }}
-            echo "Azure resource group '${{ format(rg-{0}-{1}, inputs.env_key, inputs.project_key) }}' created"
+            az group create --name ${{ format('rg-{0}-{1}', inputs.env_key, inputs.project_key) }} --location ${{  inputs.target_region  }}
+            echo "Azure resource group '${{ format('rg-{0}-{1}', inputs.env_key, inputs.project_key) }}' created"
