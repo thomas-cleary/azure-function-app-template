@@ -3,17 +3,17 @@ name: 'Infra - Deploy'
 on:
   workflow_call:
     inputs:
+      gha_env:
+        required: true
+        type: string
+
       env_key:
         required: true
         type: string
 
-      test_message:
+      target_region:
         required: true
         type: string
-
-      validate:
-        required: true
-        type: boolean
 
     secrets:
       azure_credentials:
@@ -23,7 +23,7 @@ jobs:
   deploy_infra:
     name: Deploy Infra
     runs-on: ubuntu-latest
-    environment: ${{ inputs.env_key }}
+    environment: ${{inputs.gha_env}}
     steps:
       - name: Run Checkout GitHub Action
         uses: actions/checkout@v1
@@ -31,7 +31,27 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1.1
         with:
-          creds: ${{ secrets.azure_credentials }}
+          creds: ${{secrets.azure_credentials}}
 
-      - name: Echo Test Message
-        run: echo ${{ inputs.test_message }}
+      - name: Validate Azure Infra Deployment
+        if: validate
+        uses: azure/arm-deploy
+        with:
+          deploymentName: afat-infra-${{inputs.env_key}}-${{github.run_number}}
+          deploymentMode: Incremental
+          scope: subscription
+          region: ${{inputs.target_region}}
+          template: ./infra/main.bicep
+          parameters: ./infra/parameters/infra-dev.json
+          additionalArguments: '--what-if'
+
+      - name: Deploy Azure Infra
+        if: ${{success()}}
+        uses: azure/arm-deploy
+        with:
+          deploymentName: afat-infra-${{inputs.env_key}}-${{github.run_number}}
+          deploymentMode: Incremental
+          scope: subscription
+          region: ${{inputs.target_region}}
+          template: ./infra/main.bicep
+          parameters: ./infra/parameters/infra-dev.json
