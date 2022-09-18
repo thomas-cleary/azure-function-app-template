@@ -14,12 +14,36 @@ on:
       - '.github/**/**.infra.yaml'
 
 jobs:
+  validate_dev:
+    name: Validate DEV
+    runs-on: ubuntu-latest
+    environment: DEV
+    env:
+      env_key: DEV
+    steps:
+      - name: Validate Deploy to ${{ env.env_key }}
+        uses: .github/actions/deploy.infra.yaml
+        with:
+          env_key: ${{ env.env_key }}
+          test_message: Hello ${{ env.env_key }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          validate: true
+
   deploy_dev:
     name: Deploy DEV
-    uses: ./.github/workflows/deploy.infra.yaml
-    with:
-      environment: DEV
-      test_message: 'Hello DEV environment!'
+    needs: validate_dev
+    runs-on: ubuntu-latest
+    environment: DEV
+    env:
+      env_key: DEV
+    steps:
+      - name: Deploy to ${{ env.env_key }}
+        uses: .github/actions/deploy.infra.yaml
+        with:
+          env_key: ${{ env.env_key }}
+          test_message: Hello ${{ env.env_key }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          validate: false
 
   deploy_test:
     name: Deploy TEST

@@ -1,0 +1,30 @@
+name: 'Infra - Deploy'
+
+inputs:
+  env_key:
+    required: true
+    type: string
+
+  test_message:
+    required: true
+    type: string
+
+  azure_credentials:
+    required: true
+
+  validate:
+    required: true
+    type: boolean
+
+runs:
+  using: composite
+  steps:
+    - name: Azure Login
+      uses: azure/login@v1.1
+      with:
+        creds: ${{ inputs.azure_credentials }}
+
+    - name: Echo Test Message
+      needs: Azure Login
+      runs-on: ubuntu-latest
+      run: echo ${{ inputs.test_message }}
