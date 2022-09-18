@@ -21,6 +21,8 @@ jobs:
     env:
       env_key: DEV
     steps:
+      - name: Run Checkout GitHub Action
+        uses: actions/checkout@v1
       - name: Validate Deploy to ${{ env.env_key }}
         uses: ./.github/workflows/deploy.infra.yaml
         with:
@@ -37,6 +39,8 @@ jobs:
     env:
       env_key: DEV
     steps:
+      - name: Run Checkout GitHub Action
+        uses: actions/checkout@v1
       - name: Deploy to ${{ env.env_key }}
         uses: ./.github/workflows/deploy.infra.yaml
         with:
