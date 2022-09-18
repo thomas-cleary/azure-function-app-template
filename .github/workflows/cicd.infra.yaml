@@ -22,7 +22,7 @@ jobs:
       env_key: DEV
     steps:
       - name: Validate Deploy to ${{ env.env_key }}
-        uses: ./.github/actions/deploy.infra.yaml
+        uses: ./.github/workflows/deploy.infra.yaml
         with:
           env_key: ${{ env.env_key }}
           test_message: Hello ${{ env.env_key }}
@@ -38,7 +38,7 @@ jobs:
       env_key: DEV
     steps:
       - name: Deploy to ${{ env.env_key }}
-        uses: ./.github/actions/deploy.infra.yaml
+        uses: ./.github/workflows/deploy.infra.yaml
         with:
           env_key: ${{ env.env_key }}
           test_message: Hello ${{ env.env_key }}

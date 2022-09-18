@@ -1,0 +1,36 @@
+name: 'Infra - Deploy'
+
+on:
+  workflow_call:
+    inputs:
+      env_key:
+        required: true
+        type: string
+
+      test_message:
+        required: true
+        type: string
+
+      validate:
+        required: true
+        type: boolean
+
+    secrets:
+      azure_credentials:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env_key }}
+    steps:
+      - name: Run Checkout GitHub Action
+        uses: actions/checkout@v1
+
+      - name: Azure Login
+        uses: azure/login@v1.1
+        with:
+          creds: ${{ inputs.azure_credentials }}
+
+      - name: Echo Test Message
+        run: echo ${{ inputs.test_message }}
