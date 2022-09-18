@@ -37,6 +37,7 @@ jobs:
 
   validate_test:
     name: Validate TEST
+    if: github.ref_name == 'main'
     needs: deploy_dev
     uses: ./.github/workflows/deploy.infra.yaml
     with:
