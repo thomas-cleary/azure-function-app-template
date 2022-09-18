@@ -16,99 +16,70 @@ on:
 jobs:
   validate_dev:
     name: Validate DEV
-    runs-on: ubuntu-latest
-    environment: DEV
-    env:
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
       env_key: DEV
-    steps:
-      - name: Run Checkout GitHub Action
-        uses: actions/checkout@v1
-      - name: Validate Deploy to ${{ env.env_key }}
-        uses: ./.github/workflows/deploy.infra.yaml
-        with:
-          env_key: ${{ env.env_key }}
-          test_message: Hello ${{ env.env_key }}
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          validate: true
+      test_message: Hello DEV
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      validate: true
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   deploy_dev:
     name: Deploy DEV
-    needs: validate_dev
-    runs-on: ubuntu-latest
-    environment: DEV
-    env:
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
       env_key: DEV
-    steps:
-      - name: Run Checkout GitHub Action
-        uses: actions/checkout@v1
-      - name: Deploy to ${{ env.env_key }}
-        uses: ./.github/workflows/deploy.infra.yaml
-        with:
-          env_key: ${{ env.env_key }}
-          test_message: Hello ${{ env.env_key }}
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          validate: false
+      test_message: Hello DEV
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      validate: false
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   validate_test:
     name: Validate TEST
     needs: deploy_dev
-    runs-on: ubuntu-latest
-    environment: TEST
-    env:
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
       env_key: TEST
-    steps:
-      - name: Validate Deploy to ${{ env.env_key }}
-        uses: ./.github/workflows/deploy.infra.yaml
-        with:
-          env_key: ${{ env.env_key }}
-          test_message: Hello ${{ env.env_key }}
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          validate: true
+      test_message: Hello TEST
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      validate: true
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   deploy_test:
     name: Deploy TEST
     needs: validate_test
-    runs-on: ubuntu-latest
-    environment: TEST
-    env:
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
       env_key: TEST
-    steps:
-      - name: Deploy to ${{ env.env_key }}
-        uses: ./.github/workflows/deploy.infra.yaml
-        with:
-          env_key: ${{ env.env_key }}
-          test_message: Hello ${{ env.env_key }}
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          validate: false
+      test_message: Hello TEST
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      validate: false
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   validate_prd:
     name: Validate PRD
     needs: deploy_test
-    runs-on: ubuntu-latest
-    environment: PRD
-    env:
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
       env_key: PRD
-    steps:
-      - name: Validate Deploy to ${{ env.env_key }}
-        uses: ./.github/workflows/deploy.infra.yaml
-        with:
-          env_key: ${{ env.env_key }}
-          test_message: Hello ${{ env.env_key }}
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          validate: true
+      test_message: Hello PRD
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      validate: true
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   deploy_prd:
     name: Deploy PRD
     needs: validate_prd
-    runs-on: ubuntu-latest
-    environment: PRD
-    env:
+    uses: ./.github/workflows/deploy.infra.yaml
+    with:
       env_key: PRD
-    steps:
-      - name: Deploy to ${{ env.env_key }}
-        uses: ./.github/workflows/deploy.infra.yaml
-        with:
-          env_key: ${{ env.env_key }}
-          test_message: Hello ${{ env.env_key }}
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          validate: false
+      test_message: Hello PRD
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      validate: false
+    secrets:
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}

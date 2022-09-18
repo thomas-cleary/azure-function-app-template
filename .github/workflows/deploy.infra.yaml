@@ -24,6 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.env_key }}
     steps:
+      - name: Run Checkout GitHub Action
+        uses: actions/checkout@v1
+
       - name: Azure Login
         uses: azure/login@v1.1
         with:
