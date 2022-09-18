@@ -1,8 +1,5 @@
 // Entry point for declaring required Azure resources
 
-// To deploy a ResourceGroup the scope needs to be the subscription it is deployed into
-targetScope = 'subscription'
-
 // Parameters -----------------------------------------------------------------
 @description('The deployment environment')
 @allowed([
@@ -28,8 +25,13 @@ var resourceTags = {
 }
 
 // Resources ------------------------------------------------------------------
-resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: 'rg-${envKey}-${projectKey}'
-  location: location
-  tags: resourceTags
+module functionAppResources 'modules/function-app-resources.bicep' = {
+  name: 'function-app-resources-${envKey}'
+  scope: resourceGroup('rg-${envKey}-${projectKey}')
+  params: {
+    envKey: envKey
+    location: location
+    projectKey: projectKey
+    resourceTags: resourceTags
+  }
 }

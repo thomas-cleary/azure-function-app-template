@@ -11,7 +11,7 @@ on:
         required: true
         type: string
 
-      target_region:
+      project_key:
         required: true
         type: string
 
@@ -24,6 +24,8 @@ jobs:
     name: Deploy Infra
     runs-on: ubuntu-latest
     environment: ${{ inputs.gha_env }}
+    env:
+      RG_NAME: rg-${{ inputs.env_key }}-${{ inputs.project_key }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v1
@@ -36,10 +38,9 @@ jobs:
       - name: Validate Azure Infra Deployment
         uses: azure/arm-deploy@v1
         with:
-          deploymentName: afat-infra-${{ inputs.env_key }}-${{ github.run_number }}
+          deploymentName: ${{ env.RG_NAME }}-${{ github.run_number }}
           deploymentMode: Incremental
-          scope: subscription
-          region: ${{ inputs.target_region }}
+          resourceGroupName: ${{ env.RG_NAME }}
           template: ./infra/main.bicep
           parameters: ./infra/parameters/infra-dev.json
           additionalArguments: '--what-if'
@@ -48,9 +49,8 @@ jobs:
         if: ${{ success() }}
         uses: azure/arm-deploy@v1
         with:
-          deploymentName: afat-infra-${{ inputs.env_key }}-${{ github.run_number }}
+          deploymentName: ${{ env.RG_NAME }}-${{ github.run_number }}
           deploymentMode: Incremental
-          scope: subscription
-          region: ${{ inputs.target_region }}
+          resourceGroupName: ${{ env.RG_NAME }}
           template: ./infra/main.bicep
           parameters: ./infra/parameters/infra-dev.json
