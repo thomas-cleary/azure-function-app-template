@@ -1,0 +1,34 @@
+name: 'Depoy Infra'
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+      test_message:
+        required: true
+        type: string
+
+jobs:
+  validate_infra_mock:
+    name: Validate Infra Mock
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Test Message
+        env:
+          MESSAGE: ${{ inputs.test_message }}
+        run: echo $MESSAGE
+
+  deploy_infra_mock:
+    name: Deploy Infra Mock
+    needs: validate_infra_mock
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Test Message
+        env:
+          MESSAGE: ${{ inputs.test_message }}
+        run: echo $MESSAGE
