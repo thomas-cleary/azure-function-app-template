@@ -3,32 +3,54 @@ name: 'Infra - Deploy'
 on:
   workflow_call:
     inputs:
-      environment:
+      gha_env:
         required: true
         type: string
 
-      test_message:
+      env_key:
         required: true
         type: string
+
+      target_region:
+        required: true
+        type: string
+
+    secrets:
+      azure_credentials:
+        required: true
 
 jobs:
-  validate_infra_mock:
-    name: Validate Infra Mock
-    environment: ${{ inputs.environment }}
+  deploy_infra:
+    name: Deploy Infra
     runs-on: ubuntu-latest
+    environment: ${{ inputs.gha_env }}
     steps:
-      - name: Echo Test Message
-        env:
-          MESSAGE: ${{ inputs.test_message }}
-        run: echo $MESSAGE
+      - name: Checkout Repo
+        uses: actions/checkout@v1
 
-  deploy_infra_mock:
-    name: Deploy Infra Mock
-    needs: validate_infra_mock
-    environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo Test Message
-        env:
-          MESSAGE: ${{ inputs.test_message }}
-        run: echo $MESSAGE
+      - name: Azure Login
+        uses: azure/login@v1.1
+        with:
+          creds: ${{ secrets.azure_credentials }}
+
+      - name: Validate Azure Infra Deployment
+        uses: azure/arm-deploy@v1
+        with:
+          deploymentName: afat-infra-${{ inputs.env_key }}-${{ github.run_number }}
+          deploymentMode: Incremental
+          scope: subscription
+          region: ${{ inputs.target_region }}
+          template: ./infra/main.bicep
+          parameters: ./infra/parameters/infra-dev.json
+          additionalArguments: '--what-if'
+
+      - name: Deploy Azure Infra
+        if: ${{ success() }}
+        uses: azure/arm-deploy@v1
+        with:
+          deploymentName: afat-infra-${{ inputs.env_key }}-${{ github.run_number }}
+          deploymentMode: Incremental
+          scope: subscription
+          region: ${{ inputs.target_region }}
+          template: ./infra/main.bicep
+          parameters: ./infra/parameters/infra-dev.json
