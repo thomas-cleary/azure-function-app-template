@@ -22,7 +22,7 @@ jobs:
       env_key: dev
       target_region: australiaeast
     secrets:
-      azure_credentials: ${{secrets.AZURE_CREDENTIALS}}
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   deploy_test:
     name: Deploy to TEST
@@ -34,7 +34,7 @@ jobs:
       env_key: test
       target_region: australiaeast
     secrets:
-      azure_credentials: ${{secrets.AZURE_CREDENTIALS}}
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   deploy_prd:
     name: Deploy to PRD
@@ -45,4 +45,4 @@ jobs:
       env_key: prd
       target_region: australiaeast
     secrets:
-      azure_credentials: ${{secrets.AZURE_CREDENTIALS}}
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}

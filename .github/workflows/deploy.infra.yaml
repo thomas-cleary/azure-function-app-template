@@ -23,34 +23,34 @@ jobs:
   deploy_infra:
     name: Deploy Infra
     runs-on: ubuntu-latest
-    environment: ${{inputs.gha_env}}
+    environment: ${{ inputs.gha_env }}
     steps:
-      - name: Run Checkout GitHub Action
+      - name: Checkout Repo
         uses: actions/checkout@v1
 
       - name: Azure Login
         uses: azure/login@v1.1
         with:
-          creds: ${{secrets.azure_credentials}}
+          creds: ${{ secrets.azure_credentials }}
 
       - name: Validate Azure Infra Deployment
         uses: azure/arm-deploy@v1
         with:
-          deploymentName: afat-infra-${{inputs.env_key}}-${{github.run_number}}
+          deploymentName: afat-infra-${{ inputs.env_key }}-${{ github.run_number }}
           deploymentMode: Incremental
           scope: subscription
-          region: ${{inputs.target_region}}
+          region: ${{ inputs.target_region }}
           template: ./infra/main.bicep
           parameters: ./infra/parameters/infra-dev.json
           additionalArguments: '--what-if'
 
       - name: Deploy Azure Infra
-        if: ${{success()}}
+        if: ${{ success() }}
         uses: azure/arm-deploy@v1
         with:
-          deploymentName: afat-infra-${{inputs.env_key}}-${{github.run_number}}
+          deploymentName: afat-infra-${{ inputs.env_key }}-${{ github.run_number }}
           deploymentMode: Incremental
           scope: subscription
-          region: ${{inputs.target_region}}
+          region: ${{ inputs.target_region }}
           template: ./infra/main.bicep
           parameters: ./infra/parameters/infra-dev.json
