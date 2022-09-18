@@ -24,6 +24,7 @@ jobs:
 
   deploy_infra_mock:
     name: Deploy Infra Mock
+    needs: validate_infra_mock
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
