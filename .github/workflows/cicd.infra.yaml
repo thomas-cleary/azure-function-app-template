@@ -1,0 +1,40 @@
+name: 'Infra CI/CD'
+
+on:
+  pull_request:
+    paths:
+      - 'infra/**'
+      - '.github/**/**infra.yaml'
+
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'infra/**'
+      - '.github/**/**.infra.yaml'
+
+jobs:
+  deploy_dev:
+    name: Deploy DEV
+    uses: .github/workflows/deploy.infra.yaml
+    with:
+      environment: DEV
+      test_message: 'Hello DEV environment!'
+
+  deploy_test:
+    name: Deploy TEST
+    if: github.ref_name == 'main'
+    needs: deploy_dev
+    uses: .github/workflows/deploy.infra.yaml
+    with:
+      environment: TEST
+      test_message: 'Hello TEST environment!'
+
+  deploy_prd:
+    name: Deploy PRD
+    if: github.ref_name == 'main'
+    needs: deploy_test
+    uses: .github/workflows/deploy.infra.yaml
+    with:
+      environment: PRD
+      test_message: 'Hello PRD environment!'
