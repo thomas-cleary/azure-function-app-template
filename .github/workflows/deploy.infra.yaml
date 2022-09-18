@@ -35,7 +35,7 @@ jobs:
 
       - name: Validate Azure Infra Deployment
         if: validate
-        uses: azure/arm-deploy
+        uses: azure/arm-deploy@v1
         with:
           deploymentName: afat-infra-${{inputs.env_key}}-${{github.run_number}}
           deploymentMode: Incremental
@@ -47,7 +47,7 @@ jobs:
 
       - name: Deploy Azure Infra
         if: ${{success()}}
-        uses: azure/arm-deploy
+        uses: azure/arm-deploy@v1
         with:
           deploymentName: afat-infra-${{inputs.env_key}}-${{github.run_number}}
           deploymentMode: Incremental
