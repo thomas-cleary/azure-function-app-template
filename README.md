@@ -1,2 +1,3 @@
 # azure-function-app-template
-  ☁️ ⚡️ - 🍽
+
+☁️ ⚡️ - 🍽
