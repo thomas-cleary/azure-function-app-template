@@ -13,9 +13,6 @@ on:
       - 'infra/**'
       - '.github/**/**.infra.yaml'
 
-env:
-  target_region: 'australiaeast'
-
 jobs:
   deploy_dev:
     name: Deploy to DEV
@@ -23,7 +20,7 @@ jobs:
     with:
       gha_env: DEV
       env_key: dev
-      target_region: ${{env.target_region}}
+      target_region: australiaeast
     secrets:
       azure_credentials: ${{secrets.AZURE_CREDENTIALS}}
 
@@ -35,7 +32,7 @@ jobs:
     with:
       gha_env: TEST
       env_key: test
-      target_region: ${{env.target_region}}
+      target_region: australiaeast
     secrets:
       azure_credentials: ${{secrets.AZURE_CREDENTIALS}}
 
@@ -46,6 +43,6 @@ jobs:
     with:
       gha_env: PRD
       env_key: prd
-      target_region: ${{env.target_region}}
+      target_region: australiaeast
     secrets:
       azure_credentials: ${{secrets.AZURE_CREDENTIALS}}
