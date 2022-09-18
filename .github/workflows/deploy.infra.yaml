@@ -34,7 +34,6 @@ jobs:
           creds: ${{secrets.azure_credentials}}
 
       - name: Validate Azure Infra Deployment
-        if: validate
         uses: azure/arm-deploy@v1
         with:
           deploymentName: afat-infra-${{inputs.env_key}}-${{github.run_number}}
