@@ -20,7 +20,8 @@ on:
         required: true
 
 jobs:
-  deploy:
+  deploy_infra:
+    name: Deploy Infra
     runs-on: ubuntu-latest
     environment: ${{ inputs.env_key }}
     steps:
@@ -30,7 +31,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1.1
         with:
-          creds: ${{ inputs.azure_credentials }}
+          creds: ${{ secrets.azure_credentials }}
 
       - name: Echo Test Message
         run: echo ${{ inputs.test_message }}
