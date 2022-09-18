@@ -20,18 +20,17 @@ jobs:
     with:
       env_key: DEV
       test_message: Hello DEV
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
       validate: true
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
   deploy_dev:
     name: Deploy DEV
+    needs: validate_dev
     uses: ./.github/workflows/deploy.infra.yaml
     with:
       env_key: DEV
       test_message: Hello DEV
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
       validate: false
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
@@ -43,7 +42,6 @@ jobs:
     with:
       env_key: TEST
       test_message: Hello TEST
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
       validate: true
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
@@ -55,7 +53,6 @@ jobs:
     with:
       env_key: TEST
       test_message: Hello TEST
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
       validate: false
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
@@ -67,7 +64,6 @@ jobs:
     with:
       env_key: PRD
       test_message: Hello PRD
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
       validate: true
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
@@ -79,7 +75,6 @@ jobs:
     with:
       env_key: PRD
       test_message: Hello PRD
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
       validate: false
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
