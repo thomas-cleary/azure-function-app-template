@@ -1,0 +1,37 @@
+name: 'Function App - Deploy'
+
+on:
+  workflow_call:
+    inputs:
+      gha_env:
+        required: true
+        type: string
+
+      env_key:
+        required: true
+        type: string
+
+      project_key:
+        required: true
+        type: string
+
+    secrets:
+      azure_credentials:
+        required: true
+
+jobs:
+  deploy_infra:
+    name: Deploy Function App
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.gha_env }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v1
+
+      - name: Azure Login
+        uses: azure/login@v1.1
+        with:
+          creds: ${{ secrets.azure_credentials }}
+
+      - name: Mock deploy
+        run: echo 'This is a step to mock the function app deployment'
