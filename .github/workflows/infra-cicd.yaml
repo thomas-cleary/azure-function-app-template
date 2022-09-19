@@ -20,7 +20,7 @@ jobs:
     name: Deploy to DEV
     uses: ./.github/workflows/infra-deploy.yaml
     with:
-      gha_env: DEV
+      gha_env: DEV-INFRA
       env_key: dev
       project_key: afat
     secrets:
@@ -32,7 +32,7 @@ jobs:
     needs: deploy_dev
     uses: ./.github/workflows/infra-deploy.yaml
     with:
-      gha_env: TEST
+      gha_env: TEST-INFRA
       env_key: test
       project_key: afat
     secrets:
@@ -43,7 +43,7 @@ jobs:
     needs: deploy_test
     uses: ./.github/workflows/infra-deploy.yaml
     with:
-      gha_env: PRD
+      gha_env: PRD-INFRA
       env_key: prd
       project_key: afat
     secrets:
