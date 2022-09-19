@@ -15,5 +15,9 @@ dotnet restore
 ```
 
 ```shell
+dotnet build
+```
+
+```shell
 func start
 ```
