@@ -8,6 +8,9 @@ on:
 
   workflow_dispatch:
 
+env:
+  PROJECT_KEY: afat
+
 jobs:
   deploy_dev:
     name: Deploy to DEV
@@ -15,7 +18,7 @@ jobs:
     with:
       gha_env: DEV
       env_key: dev
-      project_key: afat
+      project_key: ${{ env.PROJECT_KEY }}
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -27,7 +30,7 @@ jobs:
     with:
       gha_env: TEST
       env_key: test
-      project_key: afat
+      project_key: ${{ env.PROJECT_KEY }}
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -38,6 +41,6 @@ jobs:
     with:
       gha_env: PRD
       env_key: prd
-      project_key: afat
+      project_key: ${{ env.PROJECT_KEY }}
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
