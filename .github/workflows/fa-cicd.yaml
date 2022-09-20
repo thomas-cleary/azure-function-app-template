@@ -8,14 +8,30 @@ on:
 
   workflow_dispatch:
 
+env:
+  PROJECT_KEY: afat
+
 jobs:
+  convert_env_vars:
+    name: Convert env vars to output vars
+    runs-on: ubuntu-latest
+    outputs:
+      project_key: ${{ steps.step1.outputs.project_key }}
+    steps:
+      - name: Convert env vars to output vars for reusable workflows
+        id: step1
+        run: |
+          echo "project key: $PROJECT_KEY"
+          echo "::set-output name=project_key::$PROJECT_KEY"
+
   deploy_dev:
     name: Deploy to DEV
+    needs: convert_env_vars
     uses: ./.github/workflows/fa-deploy.yaml
     with:
       gha_env: DEV
       env_key: dev
-      project_key: afat
+      project_key: ${{ needs.convert_env_vars.outputs.project_key }}
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -27,7 +43,7 @@ jobs:
     with:
       gha_env: TEST
       env_key: test
-      project_key: afat
+      project_key: ${{ needs.convert_env_vars.outputs.project_key }}
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -38,6 +54,6 @@ jobs:
     with:
       gha_env: PRD
       env_key: prd
-      project_key: afat
+      project_key: ${{ needs.convert_env_vars.outputs.project_key }}
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
