@@ -19,6 +19,10 @@ on:
       azure_credentials:
         required: true
 
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src' # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '6.x' # set this to the dotnet version to use
+
 jobs:
   deploy_infra:
     name: Deploy Function App
@@ -33,5 +37,21 @@ jobs:
         with:
           creds: ${{ secrets.azure_credentials }}
 
-      - name: Mock deploy
-        run: echo 'This is a step to mock the function app deployment'
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Run dotnet'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet build --configuration Release --output ./output
+          popd
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: fa-${{ inputs.env_key }}-${{ inputs.project_key }}
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
