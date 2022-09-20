@@ -7,11 +7,7 @@ on:
         required: true
         type: string
 
-      env_key:
-        required: true
-        type: string
-
-      project_key:
+      azure_env:
         required: true
         type: string
 
@@ -20,8 +16,9 @@ on:
         required: true
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '6.x' # set this to the dotnet version to use
+  PROJECT_KEY: afat
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src'
+  DOTNET_VERSION: '6.x'
 
 jobs:
   deploy_infra:
@@ -53,5 +50,5 @@ jobs:
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: fa-${{ inputs.env_key }}-${{ inputs.project_key }}
+          app-name: fa-${{ inputs.azure_env }}-${{ env.PROJECT_KEY }}
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
