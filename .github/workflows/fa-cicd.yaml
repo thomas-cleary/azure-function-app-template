@@ -1,14 +1,7 @@
 name: 'Function App - CI/CD'
 
 on:
-  pull_request:
-    paths:
-      - 'src/**'
-      - '.github/**/fa**.yaml'
-
   push:
-    branches:
-      - 'main'
     paths:
       - 'src/**'
       - '.github/**/fa**.yaml'

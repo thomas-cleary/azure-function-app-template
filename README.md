@@ -16,3 +16,7 @@ cd src
 ```shell
 dotnet restore && dotnet build && func start
 ```
+
+## Sending requests to the function app
+
+Requests found in `/requests` can be run using the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) VSCode extension.
