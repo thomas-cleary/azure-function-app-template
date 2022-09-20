@@ -30,8 +30,7 @@ jobs:
     uses: ./.github/workflows/fa-deploy.yaml
     with:
       gha_env: DEV
-      env_key: dev
-      project_key: ${{ needs.convert_env_vars.outputs.project_key }}
+      azure_env: dev
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -42,8 +41,7 @@ jobs:
     uses: ./.github/workflows/fa-deploy.yaml
     with:
       gha_env: TEST
-      env_key: test
-      project_key: ${{ needs.convert_env_vars.outputs.project_key }}
+      azure_env: test
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -53,7 +51,6 @@ jobs:
     uses: ./.github/workflows/fa-deploy.yaml
     with:
       gha_env: PRD
-      env_key: prd
-      project_key: ${{ needs.convert_env_vars.outputs.project_key }}
+      azure_env: prd
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
