@@ -7,11 +7,7 @@ on:
         required: true
         type: string
 
-      env_key:
-        required: true
-        type: string
-
-      project_key:
+      azure_env:
         required: true
         type: string
 
@@ -19,13 +15,16 @@ on:
       azure_credentials:
         required: true
 
+env:
+  PROJECT_NAME: azfuncapptemplate
+
 jobs:
   deploy_infra:
     name: Deploy Infra
     runs-on: ubuntu-latest
     environment: ${{ inputs.gha_env }}
     env:
-      RG_NAME: rg-${{ inputs.env_key }}-${{ inputs.project_key }}
+      RG_NAME: rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v1
@@ -35,22 +34,34 @@ jobs:
         with:
           creds: ${{ secrets.azure_credentials }}
 
+      - name: Deploy Resource Groups
+        env:
+          LOCATION: australiaeast
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: >
+            az deployment sub create
+            --location ${{ env.LOCATION }}
+            --template-file ./infra/modules/resource-group.bicep
+            --parameters envKey=${{ inputs.azure_env }} projectName=${{ env.PROJECT_NAME }} location=${{ env.LOCATION }}
+
       - name: Validate Azure Infra Deployment
+        if: ${{ success() }}
         uses: azure/arm-deploy@v1
         with:
-          deploymentName: ${{ env.RG_NAME }}-${{ github.run_number }}
+          deploymentName: validate-infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
           deploymentMode: Incremental
           resourceGroupName: ${{ env.RG_NAME }}
           template: ./infra/main.bicep
-          parameters: ./infra/parameters/infra-${{ inputs.env_key }}.parameters.json
+          parameters: ./infra/parameters/infra-${{ inputs.azure_env }}.parameters.json
           additionalArguments: '--what-if'
 
       - name: Deploy Azure Infra
         if: ${{ success() }}
         uses: azure/arm-deploy@v1
         with:
-          deploymentName: ${{ env.RG_NAME }}-${{ github.run_number }}
+          deploymentName: infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
           deploymentMode: Incremental
           resourceGroupName: ${{ env.RG_NAME }}
           template: ./infra/main.bicep
-          parameters: ./infra/parameters/infra-${{ inputs.env_key }}.parameters.json
+          parameters: ./infra/parameters/infra-${{ inputs.azure_env }}.parameters.json

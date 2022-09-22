@@ -21,8 +21,7 @@ jobs:
     uses: ./.github/workflows/infra-deploy.yaml
     with:
       gha_env: DEV
-      env_key: dev
-      project_key: afat
+      azure_env: dev
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -33,8 +32,7 @@ jobs:
     uses: ./.github/workflows/infra-deploy.yaml
     with:
       gha_env: TEST
-      env_key: test
-      project_key: afat
+      azure_env: test
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -44,7 +42,6 @@ jobs:
     uses: ./.github/workflows/infra-deploy.yaml
     with:
       gha_env: PRD
-      env_key: prd
-      project_key: afat
+      azure_env: prd
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
