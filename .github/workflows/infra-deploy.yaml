@@ -63,7 +63,7 @@ jobs:
         with:
           inlineScript: >
             az deployment group create
-            --name validate-infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
+            --name infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
             --resource-group rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
             --mode Incremental
             --template-file ./infra/main.bicep
