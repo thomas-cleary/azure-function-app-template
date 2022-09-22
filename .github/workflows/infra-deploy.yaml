@@ -45,21 +45,25 @@ jobs:
 
       - name: Validate Azure Infra Deployment
         if: ${{ success() }}
-        uses: azure/arm-deploy@v1
+        uses: Azure/CLI@v1
         with:
-          deploymentName: validate-infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
-          deploymentMode: Incremental
-          resourceGroupName: rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
-          template: ./infra/main.bicep
-          parameters: ./infra/parameters/infra-${{ inputs.azure_env }}.parameters.json
-          additionalArguments: '--what-if'
+          inlineScript: >
+            az deployment group create
+            --name validate-infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
+            --resource-group rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
+            --mode Incremental
+            --template-file ./infra/main.bicep
+            --parameters ./infra/parameters/infra-${{ inputs.azure_env }}.parameters.json
+            --what-if
 
       - name: Deploy Azure Infra
         if: ${{ success() }}
-        uses: azure/arm-deploy@v1
+        uses: Azure/CLI@v1
         with:
-          deploymentName: infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
-          deploymentMode: Incremental
-          resourceGroupName: rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
-          template: ./infra/main.bicep
-          parameters: ./infra/parameters/infra-${{ inputs.azure_env }}.parameters.json
+          inlineScript: >
+            az deployment group create
+            --name validate-infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
+            --resource-group rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
+            --mode Incremental
+            --template-file ./infra/main.bicep
+            --parameters ./infra/parameters/infra-${{ inputs.azure_env }}.parameters.json
