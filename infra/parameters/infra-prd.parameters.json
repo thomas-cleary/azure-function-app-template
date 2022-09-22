@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "envKey": {
-      "value": "dev"
+      "value": "prd"
     },
-    "projectKey": {
+    "projectName": {
+      "value": "azfuncapptemplate"
+    },
+    "projectAcronym": {
       "value": "afat"
-    },
-    "location": {
-      "value": "australiaeast"
     }
   }
 }
