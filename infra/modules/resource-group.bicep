@@ -5,6 +5,7 @@ targetScope = 'subscription'
 @description('The name of the environment resources should be deployed to should represent.')
 @allowed([
   'dev'
+  'test'
   'prd'
 ])
 param envKey string
