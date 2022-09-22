@@ -14,16 +14,31 @@ param envKey string
 param location string = 'australiaeast'
 
 @description('The name of the project these resources are being provisioned for.')
+param projectName string
+
+@description('The acronym of the project these resources are being provisioned for.')
 @minLength(1)
 @maxLength(18) // need 3 chars for 'sta' at end + 3 for env name (max length is 24 for storage account)
-param projectKey string
+param projectAcronym string
 
 @description('Tags for the resources')
 param resourceTags object
 
 // Variables -----------------------------------------------------------------
-@description('Name for function app storage account')
-var storageAccountNameSuffix = replace(projectKey, '-', '') // Name cannot contain '-' chars
+@description('Full resource name suffix')
+var fullNameSuffix = '${envKey}-${projectName}'
+
+@description('Name for storage account resource')
+var storageAccountName = 'sta${envKey}${replace(projectAcronym, '-', '')}' // Name cannot contain '-' chars
+
+@description('Name for application insights resource')
+var appInsightsName = 'ains-${fullNameSuffix}'
+
+@description('Name for app service plan resource')
+var appServicePlanName = 'asp-${fullNameSuffix}'
+
+@description('Name for function app resource')
+var functionAppName = 'fa-${fullNameSuffix}'
 
 @description('The function app runtime to use')
 var functionRuntime = 'dotnet'
@@ -71,7 +86,7 @@ var functionAppAllowedOriginsPRD = [
 
 // Resources -----------------------------------------------------------------
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
-  name: 'sta${envKey}${storageAccountNameSuffix}'
+  name: storageAccountName
   location: location
   tags: resourceTags
   sku: {
@@ -84,7 +99,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: 'ains-${envKey}-${projectKey}'
+  name: appInsightsName
   location: location
   tags: resourceTags
   kind: 'web'
@@ -94,7 +109,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-12-01' = {
-  name: 'asp-${envKey}-${projectKey}'
+  name: appServicePlanName
   location: location
   tags: resourceTags
   kind: 'linux'
@@ -107,7 +122,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2020-12-01' = {
 }
 
 resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
-  name: 'fa-${envKey}-${projectKey}'
+  name: functionAppName
   location: location
   kind: 'functionapp'
   tags: resourceTags

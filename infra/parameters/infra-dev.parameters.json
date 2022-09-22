@@ -5,11 +5,11 @@
     "envKey": {
       "value": "dev"
     },
-    "projectKey": {
-      "value": "afat"
+    "projectName": {
+      "value": "az-funcapp-template"
     },
-    "location": {
-      "value": "australiaeast"
+    "projectAcronym": {
+      "value": "afat"
     }
   }
 }

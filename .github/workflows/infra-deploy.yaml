@@ -42,7 +42,7 @@ jobs:
           deploymentMode: Incremental
           resourceGroupName: ${{ env.RG_NAME }}
           template: ./infra/main.bicep
-          parameters: ./infra/parameters/infra-${{ inputs.env_key }}.json
+          parameters: ./infra/parameters/infra-${{ inputs.env_key }}.parameters.json
           additionalArguments: '--what-if'
 
       - name: Deploy Azure Infra
@@ -53,4 +53,4 @@ jobs:
           deploymentMode: Incremental
           resourceGroupName: ${{ env.RG_NAME }}
           template: ./infra/main.bicep
-          parameters: ./infra/parameters/infra-${{ inputs.env_key }}.json
+          parameters: ./infra/parameters/infra-${{ inputs.env_key }}.parameters.json
