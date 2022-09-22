@@ -29,16 +29,16 @@ param resourceTags object
 var fullNameSuffix = '${envKey}-${projectName}'
 
 @description('Name for storage account resource')
-var storageAccountName = 'sta${envKey}${replace(projectAcronym, '-', '')}' // Name cannot contain '-' chars
+var storageAccountName = toLower('sta${envKey}${replace(projectAcronym, '-', '')}') // Name cannot contain '-' chars
 
 @description('Name for application insights resource')
-var appInsightsName = 'ains-${fullNameSuffix}'
+var appInsightsName = toLower('ains-${fullNameSuffix}')
 
 @description('Name for app service plan resource')
-var appServicePlanName = 'asp-${fullNameSuffix}'
+var appServicePlanName = toLower('asp-${fullNameSuffix}')
 
 @description('Name for function app resource')
-var functionAppName = 'fa-${fullNameSuffix}'
+var functionAppName = toLower('fa-${fullNameSuffix}')
 
 @description('The function app runtime to use')
 var functionRuntime = 'dotnet'
