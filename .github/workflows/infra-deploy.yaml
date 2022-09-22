@@ -39,6 +39,7 @@ jobs:
         with:
           inlineScript: >
             az deployment sub create
+            --name rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
             --location ${{ env.LOCATION }}
             --template-file ./infra/modules/resource-group.bicep
             --parameters envKey=${{ inputs.azure_env }} projectName=${{ env.PROJECT_NAME }} location=${{ env.LOCATION }}
