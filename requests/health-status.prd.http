@@ -1,1 +1,1 @@
-GET https://fa-prd-afat.azurewebsites.net/api/health-status HTTP/1.1
+GET https://fa-prd-azfuncapptemplate.azurewebsites.net/api/health-status HTTP/1.1
