@@ -23,8 +23,6 @@ jobs:
     name: Deploy Infra
     runs-on: ubuntu-latest
     environment: ${{ inputs.gha_env }}
-    env:
-      RG_NAME: rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v1
@@ -51,7 +49,7 @@ jobs:
         with:
           deploymentName: validate-infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
           deploymentMode: Incremental
-          resourceGroupName: ${{ env.RG_NAME }}
+          resourceGroupName: rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
           template: ./infra/main.bicep
           parameters: ./infra/parameters/infra-${{ inputs.azure_env }}.parameters.json
           additionalArguments: '--what-if'
@@ -62,6 +60,6 @@ jobs:
         with:
           deploymentName: infra-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}-${{ github.run_number }}
           deploymentMode: Incremental
-          resourceGroupName: ${{ env.RG_NAME }}
+          resourceGroupName: rg-${{ inputs.azure_env }}-${{ env.PROJECT_NAME }}
           template: ./infra/main.bicep
           parameters: ./infra/parameters/infra-${{ inputs.azure_env }}.parameters.json
