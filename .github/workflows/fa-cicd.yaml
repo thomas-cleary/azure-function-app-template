@@ -8,9 +8,6 @@ on:
 
   workflow_dispatch:
 
-env:
-  PROJECT_KEY: afat
-
 jobs:
   deploy_dev:
     name: Deploy to DEV
